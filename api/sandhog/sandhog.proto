@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option go_package = "github.com/selftechio/sandhog/internal/api/sandhog";
+
+package selftechio.sandhog;
+
+enum Result {
+  OK = 0;
+  NOTOK = 1;
+}
+
+// A sandhog peer.
+message SandhogPeer {
+  string          public_key           = 1;
+  repeated string allowed_ips          = 2;
+  int32           listen_port          = 3;
+  oneof endpoint {
+    string endpoint_value = 4;
+  }
+  oneof persistent_keepalive {
+    int32 persistent_keepalive_value = 5;
+  }
+}
+
+// Request a sandhog to create a new tunnel.
+message StartTunnelRequest {
+  // the name of the tunnel
+  string name    = 1;
+  // the address of the tunnel
+  string address = 2;
+  //
+
+}
+
+// A response from a sandhog that was requested to create a tunnel.
+message StartTunnelResponse {
+  Result result       = 1;
+  oneof tunnel {
+    SandhogPeer tunnel_specs = 2;
+  }
+}
+
+service Sandhog {
+  // Tell sandhog to start a new tunnel.
+  rpc StartTunnel(StartTunnelRequest) returns (StartTunnelResponse) {}
+}
