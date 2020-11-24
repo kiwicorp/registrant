@@ -1,4 +1,13 @@
+//! Build script that automatically compiles protos.
+
+const PROTOS: &[&str] = &[
+    "selftechio/naas/common.proto",
+    "selftechio/naas/naas.proto"
+];
+
 fn main() {
-    tonic_build::compile_protos("api/registry/registry.proto").unwrap();
-    tonic_build::compile_protos("api/sandhog/sandhog.proto").unwrap();
+    tonic_build::configure()
+        .compile(PROTOS, 
+        &["api"])
+        .unwrap();
 }
