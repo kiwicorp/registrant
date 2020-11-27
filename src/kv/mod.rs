@@ -45,17 +45,25 @@ pub trait KVStore {
 }
 
 /// Key-value storage interface extensions.
-#[async_trait]
+#[async_trait(?Send)]
 pub trait KVStoreExt {
     /// Read a key-value pair from the store.
     async fn read_value<'f, 'v, K, V>(&self, key: K) -> Result<V>
     where
+        Self: KVStore,
         K: Into<&'f str>,
-        V: Deserialize<'v>;
+        V: Deserialize<'v>,
+    {
+        unimplemented!();
+    }
 
     /// Put a key-value pair in the store. This will create the key if non-existent.
     async fn put_value<'f, K, V>(&self, key: K, value: V) -> Result<()>
     where
+        Self: KVStore,
         K: Into<&'f str>,
-        V: Serialize;
+        V: Serialize,
+    {
+        Ok(())
+    }
 }
