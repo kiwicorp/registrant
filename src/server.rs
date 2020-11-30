@@ -50,7 +50,6 @@ impl RegistryController for RegistryControllerImpl {
 }
 
 // Container for the registrant RPC server.
-#[derive(Default)]
 pub struct RegistrantServer {}
 
 impl RegistrantServer {
