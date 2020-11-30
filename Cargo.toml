@@ -17,6 +17,7 @@ tokio = { version = "0.3", features = ["full"] }
 futures = { version = "0.3", default-features = false, features = ["alloc"] }
 async-stream = "0.3"
 tower = "0.3"
+uuid = "0.8"
 
 
 [build-dependencies]
