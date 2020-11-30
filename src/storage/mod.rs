@@ -2,6 +2,8 @@
 
 mod mem;
 
+pub use mem::IntegratedStorage;
+
 use thiserror::Error;
 
 /// Results produced by the storage component.
@@ -44,7 +46,7 @@ pub trait Storage {
     where
         K: Into<Self::Key> + Send,
         L: From<&'l [Self::Key]>,
-        Self::Key: 'l
+        Self::Key: 'l,
     {
         // how this should be supposed to work is not currently thought out.
         todo!();

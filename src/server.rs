@@ -7,13 +7,19 @@ use crate::proto::naas::RegisterResponse;
 use crate::proto::naas::Result as ResponseResult;
 use crate::proto::naas::Status as ResponseStatus;
 
+use crate::registry::Registry;
+
 use tonic::transport::Server;
 use tonic::Request;
 use tonic::Response;
 use tonic::Status;
 
+use uuid::Uuid;
+
 #[derive(Default)]
-pub struct RegistryControllerImpl {}
+pub struct RegistryControllerImpl {
+    registry: crate::registry::RegistryImpl,
+}
 
 #[tonic::async_trait]
 impl RegistryController for RegistryControllerImpl {
@@ -22,6 +28,16 @@ impl RegistryController for RegistryControllerImpl {
         request: Request<RegisterRequest>,
     ) -> Result<Response<RegisterResponse>, Status> {
         println!("Got a request from {:?}", request.remote_addr());
+
+        let req: RegisterRequest = request.into_inner();
+
+        self.registry
+            .register(
+                Uuid::parse_str(req.info.as_ref().unwrap().uuid.as_str()).unwrap(),
+                req.info.as_ref().unwrap().hostname.as_str(),
+            )
+            .await
+            .unwrap();
 
         let reply = RegisterResponse {
             status: Some(ResponseStatus {
