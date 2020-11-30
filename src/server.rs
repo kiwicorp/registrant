@@ -1,6 +1,6 @@
 //! Registrant server module.
 
-use crate::proto::naas::registry_server::Registry;
+use crate::proto::naas::registry_server::Registry as RegistryController;
 use crate::proto::naas::registry_server::RegistryServer;
 use crate::proto::naas::RegisterRequest;
 use crate::proto::naas::RegisterResponse;
@@ -13,10 +13,10 @@ use tonic::Response;
 use tonic::Status;
 
 #[derive(Default)]
-pub struct RegistryImpl {}
+pub struct RegistryControllerImpl {}
 
 #[tonic::async_trait]
-impl Registry for RegistryImpl {
+impl RegistryController for RegistryControllerImpl {
     async fn register(
         &self,
         request: Request<RegisterRequest>,
@@ -40,7 +40,7 @@ pub struct RegistrantServer {}
 impl RegistrantServer {
     pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
         let addr = "127.0.0.1:55555".parse().unwrap();
-        let registry_impl = RegistryImpl::default();
+        let registry_impl = RegistryControllerImpl::default();
 
         Server::builder()
             .add_service(RegistryServer::new(registry_impl))
